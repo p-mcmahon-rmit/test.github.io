@@ -5,6 +5,7 @@ const playPauseIcon = document.querySelector("#playPauseIcon");
 const timeline = document.querySelector("#timelineProgress");
 const currentTimeText = document.querySelector("#currentTimeFeedback");
 const totalTimeText = document.querySelector("#totalTimeFeedback");
+const mediaSource = document.querySelector("#mediaSource");
 
 /* when JS loads remove default controls */
 videoElement.removeAttribute("controls");
@@ -73,3 +74,53 @@ function updateCurrentTime(){
 }
 
 videoElement.addEventListener("timeupdate", updateTimeline);
+
+// find when I click my timeline and then jump to appropriate time
+timeline.addEventListener("click", jumpToTime);
+
+function jumpToTime(ev){
+  // find how far from the left we clicked
+  let clickX = ev.offsetX;
+  // find how wide my timeline is
+  let timeLineWidth = timeline.offsetWidth;
+  // find the ratio of click to width
+  let clickPercent = clickX / timeLineWidth;
+  // update the current time
+  videoElement.currentTime = videoElement.duration * clickPercent;
+}
+
+/// add feature to play next song after current one finished
+// this won't work properly!! needs an audio element not video
+
+// keep track of current song selection
+let currentSongNumber = 0;
+
+// store all the different songs
+const songArray = [
+  "https://thelongesthumstore.sgp1.cdn.digitaloceanspaces.com/IM-2250/p-hase_Hes.mp3",
+  "https://thelongesthumstore.sgp1.cdn.digitaloceanspaces.com/IM-2250/p-hase_Dry-Down-feat-Ben-Snaath.mp3",
+  "https://thelongesthumstore.sgp1.cdn.digitaloceanspaces.com/IM-2250/p-hase_Leapt.mp3",
+  "https://thelongesthumstore.sgp1.cdn.digitaloceanspaces.com/IM-2250/p-hase_Water-Feature.mp3"
+];
+
+function updateCurrentSong(songNumber){
+  // based on the input number, change out the src of our source
+  mediaSource.src = songArray[songNumber];
+  // then we want to load new file
+  videoElement.load();
+  // then begin playback
+  videoElement.play();
+}
+
+videoElement.addEventListener("ended", playNextOnEnd);
+
+function playNextOnEnd(){
+  if(currentSongNumber < songArray.length - 1){
+    updateCurrentSong(currentSongNumber + 1);
+    currentSongNumber += 1;
+  } else {
+    // loop back to start of array
+    updateCurrentSong(0);
+    currentSongNumber = 0;
+  }
+}
