@@ -1,10 +1,29 @@
 /* find the elements i want to interact with */
 const videoElement = document.querySelector("#mediaPlayer");
 const playPauseButton = document.querySelector("#playPauseButton");
+const playPauseIcon = document.querySelector("#playPauseIcon");
 const timeline = document.querySelector("#timelineProgress");
+const currentTimeText = document.querySelector("#currentTimeFeedback");
+const totalTimeText = document.querySelector("#totalTimeFeedback");
 
 /* when JS loads remove default controls */
 videoElement.removeAttribute("controls");
+
+// I want to update total time based on the currently loaded media file
+// this will run when page loads, but if I wanted to change the file afterwards, I'd have to 
+// update there too
+videoElement.addEventListener("canplay", updateTotalTime);
+
+function updateTotalTime(){
+  let videoSeconds = videoElement.duration;
+  let totalMin = Math.floor(videoSeconds / 60);
+  let totalSec = videoSeconds % 60;
+  if(totalSec < 10) {
+    totalSec = "0" + totalSec;
+  }
+  totalTimeText.textContent = `${totalMin}:${totalSec}`;
+}
+
 
 /* 
 Play/pause button behaviour:
@@ -18,10 +37,12 @@ cursor change on hover
 function playPause(){
   if(videoElement.paused || videoElement.ended){
     videoElement.play();
-    playPauseButton.textContent = "⏸";
+    playPauseIcon.src = "./assets/pause-icon.png";
+    playPauseIcon.alt = "pause icon";
   } else {
     videoElement.pause();
-    playPauseButton.textContent = "▶";
+    playPauseIcon.src = "./assets/play-icon.png";
+    playPauseIcon.alt = "play icon";
   }
 }
 
@@ -38,6 +59,17 @@ function updateTimeline(){
   let timePercent = (videoElement.currentTime / videoElement.duration) * 100;
   //console.log(timePercent);
   timeline.value = timePercent;
+  updateCurrentTime();
+}
+
+function updateCurrentTime(){
+  let videoSeconds = videoElement.currentTime;
+  let totalMin = Math.floor(videoSeconds / 60);
+  let totalSec = Math.floor(videoSeconds % 60);
+  if(totalSec < 10) {
+    totalSec = "0" + totalSec;
+  }
+  currentTimeText.textContent = `${totalMin}:${totalSec}`;
 }
 
 videoElement.addEventListener("timeupdate", updateTimeline);

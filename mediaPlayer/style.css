@@ -1,10 +1,17 @@
 /* store my custom variables */
 :root {
-  --colour-01: white;
-  --colour-02: black;
-  --colour-03: rgb(148, 168, 206);
-  --colour-04: coral;
-  --border: solid coral 8px;
+  /* my colour palette is taken from https://lospec.com/palette-list/lava-gb */
+  /* it's called lava-gb by Aero */
+  /* 
+  I picked this colour palette as it relates to the colours in the video. Given my context
+  I wanted to create a cohesive match to the colours existing in the video. I've also tried
+  to use darker colours for most areas to make the video itself grab users attention.
+   */
+  --colour-01: #051f39;
+  --colour-02: #ff8e80;
+  --colour-03: #4a2480;
+  --colour-04: #c53a9d;
+  --border: solid #c53a9d 8px;
 }
 
 body{
@@ -14,8 +21,8 @@ body{
   justify-content: space-between;
   gap: 1rem;
   line-height: 1.6;
-  background-color: var(--colour-03);
-  color: var(--colour-01);
+  background-color: var(--colour-01);
+  color: var(--colour-02);
 }
 
 h1{
